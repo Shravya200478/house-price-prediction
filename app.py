@@ -5,7 +5,7 @@ import numpy as np
 # Load trained model
 model = joblib.load("model.pkl")
 
-# Page configuration
+# Page Configuration
 st.set_page_config(
     page_title="House Price Prediction",
     page_icon="🏠",
@@ -13,30 +13,30 @@ st.set_page_config(
 )
 
 # Title
-st.title("🏠 House Price Prediction")
-st.write("Enter the house details below to predict the price.")
+st.title("🏠 House Price Prediction App")
+st.write("Enter house details below to predict the price.")
 
 # User Inputs
 area = st.number_input(
-    "Area (in sq ft)",
+    "Area (sq ft)",
     min_value=0.0,
     step=100.0
 )
 
 bedrooms = st.number_input(
-    "Number of Bedrooms",
+    "Bedrooms",
     min_value=0,
     step=1
 )
 
 bathrooms = st.number_input(
-    "Number of Bathrooms",
+    "Bathrooms",
     min_value=0,
     step=1
 )
 
 floors = st.number_input(
-    "Number of Floors",
+    "Floors",
     min_value=0,
     step=1
 )
@@ -48,7 +48,7 @@ yearbuilt = st.number_input(
     step=1
 )
 
-# Dropdowns
+# Dropdown Inputs
 location = st.selectbox(
     "Location",
     ["Downtown", "Suburban"]
@@ -60,11 +60,11 @@ condition = st.selectbox(
 )
 
 garage = st.selectbox(
-    "Garage Availability",
+    "Garage",
     ["Yes", "No"]
 )
 
-# Encoding categorical data
+# Encoding categorical values
 location = 0 if location == "Downtown" else 1
 
 condition_map = {
@@ -77,11 +77,12 @@ condition = condition_map[condition]
 
 garage = 1 if garage == "Yes" else 0
 
-# Prediction Button
+# Prediction
 if st.button("Predict Price"):
 
-    # Prepare features
+    # Feature array
     features = np.array([[
+        1,
         area,
         bedrooms,
         bathrooms,
@@ -95,11 +96,11 @@ if st.button("Predict Price"):
     # Predict
     prediction = model.predict(features)
 
-    # Display Result
+    # Show result
     st.success(
         f"🏡 Predicted House Price: ₹ {prediction[0]:,.2f}"
     )
 
 # Footer
 st.markdown("---")
-st.markdown("Built using Streamlit and Machine Learning")
+st.markdown("Built with ❤️ using Streamlit and Machine Learning")
