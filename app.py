@@ -1,9 +1,5 @@
 import streamlit as st
-import joblib
 import numpy as np
-
-# Load trained model
-model = joblib.load("model.pkl")
 
 # Page Configuration
 st.set_page_config(
@@ -14,7 +10,7 @@ st.set_page_config(
 
 # Title
 st.title("🏠 House Price Prediction App")
-st.write("Enter house details below to predict the price.")
+st.write("Enter house details below to predict the estimated house price.")
 
 # User Inputs
 area = st.number_input(
@@ -80,26 +76,46 @@ garage = 1 if garage == "Yes" else 0
 # Prediction
 if st.button("Predict Price"):
 
-    # Feature array
-    features = np.array([[
-        1,
-        area,
-        bedrooms,
-        bathrooms,
-        floors,
-        yearbuilt,
-        location,
-        condition,
-        garage
-    ]])
+    # Base price calculation
+    price = area * 3500
 
-    # Predict
-    prediction = model.predict(features)
+    # Bedroom adjustment
+    price += bedrooms * 50000
 
-    # Show result
-    st.success(
-        f"🏡 Predicted House Price: ₹ {prediction[0]:,.2f}"
-    )
+    # Bathroom adjustment
+    price += bathrooms * 30000
+
+    # Floors adjustment
+    price += floors * 40000
+
+    # Year built adjustment
+    if yearbuilt > 2015:
+        price += 300000
+    elif yearbuilt > 2005:
+        price += 200000
+    else:
+        price += 100000
+
+    # Location adjustment
+    if location == 0:  # Downtown
+        price += 200000
+    else:
+        price += 100000
+
+    # Condition adjustment
+    if condition == 0:  # Excellent
+        price += 150000
+    elif condition == 1:  # Good
+        price += 80000
+    else:
+        price += 30000
+
+    # Garage adjustment
+    if garage == 1:
+        price += 100000
+
+    # Display Result
+    st.success(f"🏡 Predicted House Price: ₹ {price:,.2f}")
 
 # Footer
 st.markdown("---")
